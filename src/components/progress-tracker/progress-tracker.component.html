@@ -1,0 +1,52 @@
+<ng-container *ngIf="!isMobile">
+<div class="progress-tracker">
+  <h3>Claim Status</h3>
+  <ul>
+    <li *ngFor="let step of progressTrackers; let i = index"
+    [ngClass]="getStepClass(step.progressStatus)">
+      <div class="progress-icon">
+        <ng-container *ngIf="step.progressStatus === 'done'; else notDone">
+          <span>&#10003;</span>
+        </ng-container>
+        <ng-template #notDone>
+          <span>{{ step.progressNo }}</span>
+        </ng-template>
+      </div>
+      <div class="progress-details">
+        <div class="progress-name">{{ step.progressName }}</div>
+        <div class="progress-date">{{ step.progressDate }}</div>
+      </div>
+    </li>
+  </ul>
+</div>
+</ng-container>
+
+ <!-- Mobile version -->
+<ng-container *ngIf="isMobile">
+  <div class="progress-container">
+    <div class="progress-steps">
+      <div *ngFor="let step of progressTrackers; let i = index; let last = last" class="step-item">
+        <div class="circle-container">
+          <div class="progress-circle" [ngClass]="getCircleClass(step.progressStatus)">
+            <ng-container *ngIf="step.progressStatus === 'done'">
+              <i class="fas fa-check">&#10003;</i>
+            </ng-container>
+            <ng-container *ngIf="step.progressStatus !== 'done'">
+              {{ step.progressNo }}
+            </ng-container>
+          </div>
+
+          <div *ngIf="!last" class="horizontal-line" [ngClass]="getLineClass(i)">
+          </div>
+        </div>
+
+        <div class="step-details">
+          <span class="step-name">{{ step.progressName }}</span>
+          <span class="step-date">{{ step.progressDate }}</span>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-container>
+
