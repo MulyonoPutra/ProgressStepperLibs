@@ -1,1 +1,4 @@
-<app-progress-tracker [progressTrackers]="progressTrackers"></app-progress-tracker>
+
+<div class="" *ngIf="claimStatus$ | async as claimStatus">
+  <app-progress-tracker [progressTrackers]="claimStatus"></app-progress-tracker>
+</div>

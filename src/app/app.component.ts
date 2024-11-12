@@ -1,22 +1,32 @@
+import { Component, OnInit } from '@angular/core';
+
+import { ClaimStatus } from './claim-tracking/models/claim-status';
+import { ClaimStatusService } from './claim-tracking/services/claim-status.service';
+import { ClaimStatusStore } from './claim-tracking/store/claim-status.store';
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Observable } from 'rxjs';
 import { ProgressTrackerComponent } from '../components/progress-tracker/progress-tracker.component';
+import { provideComponentStore } from '@ngrx/component-store';
 
 @Component({
   selector: 'app-root',
   standalone: true,
   imports: [CommonModule, ProgressTrackerComponent],
   templateUrl: './app.component.html',
-  styleUrl: './app.component.scss'
+  styleUrl: './app.component.scss',
+  providers: [provideComponentStore(ClaimStatusStore), ClaimStatusService],
 })
-export class AppComponent {
-  title = 'progress-stepper';
+export class AppComponent implements OnInit {
 
-  progressTrackers = [
-    { progressNo: '1', progressName: 'Document', progressDate: '12 Jan 2024', progressStatus: 'done' },
-    { progressNo: '2', progressName: 'Analysis Process', progressDate: '13 Jan 2024', progressStatus: 'done' },
-    { progressNo: '3', progressName: 'Pending', progressDate: '14 Jan 2024', progressStatus: 'onprogress' },
-    { progressNo: '4', progressName: 'Result', progressDate: '-', progressStatus: 'onprogress' },
-    { progressNo: '5', progressName: 'Paid', progressDate: '-', progressStatus: 'notStarted' }
-  ];
+  title = 'progress-stepper';
+  claimStatus$!: Observable<ClaimStatus[]>;
+
+  constructor(private store: ClaimStatusStore) { }
+
+  ngOnInit(): void {
+    this.claimStatus$ = this.store.claimStatus$;
+    this.store.loadClaimStatus();
+  }
+
+
 }
